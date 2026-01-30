@@ -2,30 +2,56 @@ import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class TabItem {
+/// Internal tab item for the floating tab bar.
+class TabBarItem {
   final String title;
-  final String pageTitle;
-  final String subtitle;
   final IconData icon;
 
-  const TabItem({
+  const TabBarItem({
     required this.title,
-    required this.pageTitle,
-    required this.subtitle,
     required this.icon,
   });
 }
 
+/// A floating tab bar with anchored expansion animation.
+///
+/// When hovered, the tab bar expands to show labels alongside icons.
+/// The expansion is anchored to the tab where the cursor enters,
+/// keeping that tab visually fixed while others expand outward.
 class FloatingTabBar extends StatefulWidget {
-  final List<TabItem> tabs;
+  final List<TabBarItem> tabs;
   final int currentIndex;
   final ValueChanged<int> onTabSelected;
+
+  /// Background color of the tab bar.
+  final Color backgroundColor;
+
+  /// Border color of the tab bar.
+  final Color borderColor;
+
+  /// Color of the active tab background.
+  final Color activeColor;
+
+  /// Text/icon color for inactive tabs.
+  final Color inactiveColor;
+
+  /// Text/icon color for active tab.
+  final Color activeTextColor;
+
+  /// Duration of the expand/collapse animation.
+  final Duration animationDuration;
 
   const FloatingTabBar({
     super.key,
     required this.tabs,
     required this.currentIndex,
     required this.onTabSelected,
+    this.backgroundColor = const Color(0xFFFFFFFF),
+    this.borderColor = const Color(0xFFE2E8F0),
+    this.activeColor = const Color(0xFF3B82F6),
+    this.inactiveColor = const Color(0xFF64748B),
+    this.activeTextColor = Colors.white,
+    this.animationDuration = const Duration(milliseconds: 250),
   });
 
   @override
@@ -37,9 +63,8 @@ class _FloatingTabBarState extends State<FloatingTabBar>
   late AnimationController _controller;
   late Animation<double> _animation;
 
-  int _anchorIndex = 1; // Default to middle tab
+  int _anchorIndex = 1;
 
-  // Approximate tab widths (used for anchor calculation)
   static const double _collapsedTabWidth = 44.0;
   static const double _expandedTabWidth = 106.0;
   static const double _containerPadding = 6.0;
@@ -47,8 +72,9 @@ class _FloatingTabBarState extends State<FloatingTabBar>
   @override
   void initState() {
     super.initState();
+    _anchorIndex = (widget.tabs.length - 1) ~/ 2;
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 250),
+      duration: widget.animationDuration,
       vsync: this,
     );
     _animation = CurvedAnimation(
@@ -65,8 +91,6 @@ class _FloatingTabBarState extends State<FloatingTabBar>
   }
 
   void _onEnter(PointerEnterEvent event) {
-    // Calculate which tab the cursor is over based on x position
-    // Subtract container padding to get position within tab row
     final x = event.localPosition.dx - _containerPadding;
     final tabIndex =
         (x / _collapsedTabWidth).floor().clamp(0, widget.tabs.length - 1);
@@ -81,8 +105,6 @@ class _FloatingTabBarState extends State<FloatingTabBar>
     _controller.reverse();
   }
 
-  // Calculate horizontal shift to keep anchor tab in place
-  // Formula: shift = delta * ((numTabs - 1) / 2 - anchorIndex)
   double _calculateShift(double t) {
     const delta = _expandedTabWidth - _collapsedTabWidth;
     final centerIndex = (widget.tabs.length - 1) / 2;
@@ -109,14 +131,12 @@ class _FloatingTabBarState extends State<FloatingTabBar>
                 child: Container(
                   padding: EdgeInsets.all(lerpDouble(6, 8, t)!),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
+                    color: widget.backgroundColor.withValues(alpha: 0.9),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: const Color(0xFFE2E8F0),
-                    ),
+                    border: Border.all(color: widget.borderColor),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.08),
+                        color: Colors.black.withValues(alpha: 0.08),
                         blurRadius: 20,
                         offset: const Offset(0, 4),
                       ),
@@ -131,6 +151,9 @@ class _FloatingTabBarState extends State<FloatingTabBar>
                         isActive: index == widget.currentIndex,
                         expandProgress: t,
                         onTap: () => widget.onTabSelected(index),
+                        activeColor: widget.activeColor,
+                        inactiveColor: widget.inactiveColor,
+                        activeTextColor: widget.activeTextColor,
                       );
                     }),
                   ),
@@ -148,8 +171,11 @@ class _TabButton extends StatefulWidget {
   final String title;
   final IconData icon;
   final bool isActive;
-  final double expandProgress; // 0.0 = collapsed, 1.0 = expanded
+  final double expandProgress;
   final VoidCallback onTap;
+  final Color activeColor;
+  final Color inactiveColor;
+  final Color activeTextColor;
 
   const _TabButton({
     required this.title,
@@ -157,6 +183,9 @@ class _TabButton extends StatefulWidget {
     required this.isActive,
     required this.expandProgress,
     required this.onTap,
+    required this.activeColor,
+    required this.inactiveColor,
+    required this.activeTextColor,
   });
 
   @override
@@ -170,10 +199,10 @@ class _TabButtonState extends State<_TabButton> {
   Widget build(BuildContext context) {
     final t = widget.expandProgress;
     final color = widget.isActive
-        ? Colors.white
+        ? widget.activeTextColor
         : _isHovered
             ? const Color(0xFF1E293B)
-            : const Color(0xFF64748B);
+            : widget.inactiveColor;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -187,7 +216,7 @@ class _TabButtonState extends State<_TabButton> {
           ),
           decoration: BoxDecoration(
             color: widget.isActive
-                ? const Color(0xFF3B82F6)
+                ? widget.activeColor
                 : _isHovered
                     ? const Color(0xFFF1F5F9)
                     : Colors.transparent,
@@ -201,7 +230,6 @@ class _TabButtonState extends State<_TabButton> {
                 size: lerpDouble(20, 18, t),
                 color: color,
               ),
-              // Animate text width using ClipRect + SizeTransition-like approach
               ClipRect(
                 child: Align(
                   alignment: Alignment.centerLeft,

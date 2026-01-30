@@ -13,12 +13,12 @@ class PlaceholderBox extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFF3B82F6).withOpacity(0.08),
+        color: const Color(0xFF3B82F6).withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12),
       ),
       child: CustomPaint(
         painter: _DashedBorderPainter(
-          color: const Color(0xFF3B82F6).withOpacity(0.4),
+          color: const Color(0xFF3B82F6).withValues(alpha: 0.4),
           strokeWidth: 2,
           dashWidth: 8,
           dashSpace: 4,

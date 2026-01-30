@@ -12,3 +12,8 @@ pubspec.lock
 
 # macOS
 .DS_Store
+
+# Example
+example/.dart_tool/
+example/build/
+example/pubspec.lock
