@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Rail Layout Example',
+      title: 'Flutter Rail Layout Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.light,
@@ -38,37 +38,37 @@ class ExampleLayout extends StatelessWidget {
     return HorizontalRailLayout(
       tabs: const [
         RailTab(
-          label: 'Topology',
-          pageTitle: 'Network Topology',
-          subtitle: 'Industrial control network visualization',
-          icon: Icons.hub_outlined,
-          page: PlaceholderBox(text: 'Topology Chart Area'),
+          label: 'Home',
+          pageTitle: 'Home',
+          subtitle: 'Welcome to the app',
+          icon: Icons.home_outlined,
+          page: PlaceholderBox(text: 'Home Content'),
         ),
         RailTab(
-          label: 'Monitoring',
-          pageTitle: 'Real-time Monitoring',
-          subtitle: 'Device status and traffic monitoring',
-          icon: Icons.monitor_heart_outlined,
-          page: MonitoringPage(),
+          label: 'Dashboard',
+          pageTitle: 'Dashboard',
+          subtitle: 'Overview and statistics',
+          icon: Icons.dashboard_outlined,
+          page: DashboardPage(),
         ),
         RailTab(
-          label: 'Analytics',
-          pageTitle: 'Data Analytics',
-          subtitle: 'Traffic analysis and trend insights',
-          icon: Icons.analytics_outlined,
-          page: AnalyticsPage(),
+          label: 'Projects',
+          pageTitle: 'Projects',
+          subtitle: 'Manage your projects',
+          icon: Icons.folder_outlined,
+          page: ProjectsPage(),
         ),
         RailTab(
-          label: 'Reports',
-          pageTitle: 'System Reports',
-          subtitle: 'Generate and export detailed reports',
-          icon: Icons.assessment_outlined,
-          page: ReportsPage(),
+          label: 'Messages',
+          pageTitle: 'Messages',
+          subtitle: 'Your conversations',
+          icon: Icons.message_outlined,
+          page: MessagesPage(),
         ),
         RailTab(
           label: 'Settings',
-          pageTitle: 'System Settings',
-          subtitle: 'Security policies and system configuration',
+          pageTitle: 'Settings',
+          subtitle: 'App configuration',
           icon: Icons.settings_outlined,
           page: SettingsPage(),
         ),
@@ -80,84 +80,84 @@ class ExampleLayout extends StatelessWidget {
   }
 }
 
-class MonitoringPage extends StatelessWidget {
-  const MonitoringPage({super.key});
+class DashboardPage extends StatelessWidget {
+  const DashboardPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const CardsGrid(
       cards: [
         InfoCard(
-          title: 'Device Status',
-          content: '128 devices online, 3 offline',
+          title: 'Total Users',
+          content: '1,234 active users this month',
         ),
         InfoCard(
-          title: 'Network Traffic',
-          content: 'Inbound 2.4 GB/s, Outbound 1.8 GB/s',
+          title: 'Revenue',
+          content: '\$12,345 total revenue',
         ),
         InfoCard(
-          title: 'Alert Statistics',
-          content: '12 alerts today, 9 resolved',
+          title: 'Tasks',
+          content: '42 tasks completed today',
         ),
         InfoCard(
-          title: 'System Load',
-          content: 'CPU 45%, Memory 62%, Disk 38%',
+          title: 'Performance',
+          content: '99.9% uptime this month',
         ),
       ],
     );
   }
 }
 
-class AnalyticsPage extends StatelessWidget {
-  const AnalyticsPage({super.key});
+class ProjectsPage extends StatelessWidget {
+  const ProjectsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const CardsGrid(
       cards: [
         InfoCard(
-          title: 'Traffic Trends',
-          content: 'Weekly traffic up 15%, peak hours 9AM-11AM',
+          title: 'Active Projects',
+          content: '8 projects in progress',
         ),
         InfoCard(
-          title: 'Protocol Distribution',
-          content: 'HTTP 45%, HTTPS 38%, MQTT 12%, Other 5%',
+          title: 'Completed',
+          content: '24 projects completed',
         ),
         InfoCard(
-          title: 'Anomaly Detection',
-          content: '3 anomalies detected this week, all resolved',
+          title: 'Team Members',
+          content: '12 members assigned',
         ),
         InfoCard(
-          title: 'Performance Metrics',
-          content: 'Avg latency 12ms, 99.9% uptime this month',
+          title: 'Deadlines',
+          content: '3 deadlines this week',
         ),
       ],
     );
   }
 }
 
-class ReportsPage extends StatelessWidget {
-  const ReportsPage({super.key});
+class MessagesPage extends StatelessWidget {
+  const MessagesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const CardsGrid(
       cards: [
         InfoCard(
-          title: 'Daily Summary',
-          content: 'Automated daily reports sent at 6:00 AM',
+          title: 'Inbox',
+          content: '5 unread messages',
         ),
         InfoCard(
-          title: 'Security Audit',
-          content: 'Last audit: Jan 28, 2026. Next: Feb 28, 2026',
+          title: 'Sent',
+          content: '12 messages sent today',
         ),
         InfoCard(
-          title: 'Compliance Report',
-          content: 'ISO 27001 compliant, certificate valid until 2027',
+          title: 'Drafts',
+          content: '3 drafts saved',
         ),
         InfoCard(
-          title: 'Export Options',
-          content: 'PDF, CSV, and Excel formats available',
+          title: 'Archived',
+          content: '128 archived messages',
         ),
       ],
     );
@@ -172,20 +172,20 @@ class SettingsPage extends StatelessWidget {
     return const CardsGrid(
       cards: [
         InfoCard(
-          title: 'Access Control',
-          content: 'Configure network access rules and whitelist policies',
+          title: 'Profile',
+          content: 'Manage your account settings',
         ),
         InfoCard(
-          title: 'Alert Rules',
-          content: 'Set alert thresholds and notification methods',
+          title: 'Notifications',
+          content: 'Configure alert preferences',
         ),
         InfoCard(
-          title: 'Data Backup',
-          content: 'Configure automatic backup schedules and storage',
+          title: 'Privacy',
+          content: 'Control your data sharing',
         ),
         InfoCard(
-          title: 'User Management',
-          content: 'Manage user accounts and permissions',
+          title: 'Theme',
+          content: 'Customize appearance',
         ),
       ],
     );
