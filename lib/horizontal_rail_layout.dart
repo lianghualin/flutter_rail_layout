@@ -20,16 +20,19 @@ class _HorizontalRailLayoutState extends State<HorizontalRailLayout> {
       title: 'Topology',
       pageTitle: 'Network Topology',
       subtitle: 'Industrial control network visualization',
+      icon: Icons.hub_outlined,
     ),
     TabItem(
       title: 'Monitoring',
       pageTitle: 'Real-time Monitoring',
       subtitle: 'Device status and traffic monitoring',
+      icon: Icons.monitor_heart_outlined,
     ),
     TabItem(
       title: 'Settings',
       pageTitle: 'System Settings',
       subtitle: 'Security policies and system configuration',
+      icon: Icons.settings_outlined,
     ),
   ];
 
