@@ -85,6 +85,12 @@ class HorizontalRailLayout extends StatefulWidget {
   /// Padding for the page content area.
   final EdgeInsets contentPadding;
 
+  /// Height of the header area.
+  final double headerHeight;
+
+  /// Whether to show the subtitle in the header.
+  final bool showSubtitle;
+
   /// Style for the page title text.
   final TextStyle? pageTitleStyle;
 
@@ -115,8 +121,10 @@ class HorizontalRailLayout extends StatefulWidget {
     this.enableKeyboardNavigation = true,
     this.pageTransitionDuration = const Duration(milliseconds: 500),
     this.pageTransitionCurve = Curves.easeOutCubic,
-    this.headerPadding = const EdgeInsets.fromLTRB(40, 20, 40, 20),
-    this.contentPadding = const EdgeInsets.fromLTRB(40, 100, 40, 40),
+    this.headerPadding = const EdgeInsets.fromLTRB(16, 8, 16, 8),
+    this.contentPadding = const EdgeInsets.fromLTRB(16, 70, 16, 16),
+    this.headerHeight = 70,
+    this.showSubtitle = false,
     this.pageTitleStyle,
     this.subtitleStyle,
     this.tabBarBackgroundColor = const Color(0xFFFFFFFF),
@@ -181,35 +189,33 @@ class _HorizontalRailLayoutState extends State<HorizontalRailLayout> {
     return KeyboardListener(
       focusNode: FocusNode()..requestFocus(),
       onKeyEvent: _handleKeyEvent,
-      child: Scaffold(
-        body: Stack(
-          children: [
-            // Page View
-            PageView.builder(
-              controller: _pageController,
-              itemCount: widget.tabs.length,
-              onPageChanged: (index) {
-                setState(() => _currentPage = index);
-                widget.onPageChanged?.call(index);
-              },
-              itemBuilder: (context, index) {
-                return _PageContainer(
-                  gradient: _getGradientForIndex(index),
-                  padding: widget.contentPadding,
-                  child: widget.tabs[index].page,
-                );
-              },
-            ),
+      child: Stack(
+        children: [
+          // Page View
+          PageView.builder(
+            controller: _pageController,
+            itemCount: widget.tabs.length,
+            onPageChanged: (index) {
+              setState(() => _currentPage = index);
+              widget.onPageChanged?.call(index);
+            },
+            itemBuilder: (context, index) {
+              return _PageContainer(
+                gradient: _getGradientForIndex(index),
+                padding: widget.contentPadding,
+                child: widget.tabs[index].page,
+              );
+            },
+          ),
 
-            // Header Bar
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: _buildHeaderBar(),
-            ),
-          ],
-        ),
+          // Header Bar
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: _buildHeaderBar(),
+          ),
+        ],
       ),
     );
   }
@@ -218,7 +224,7 @@ class _HorizontalRailLayoutState extends State<HorizontalRailLayout> {
     final currentTab = widget.tabs[_currentPage];
 
     const defaultTitleStyle = TextStyle(
-      fontSize: 24,
+      fontSize: 18,
       fontWeight: FontWeight.w600,
       color: Color(0xFF1E293B),
     );
@@ -230,27 +236,33 @@ class _HorizontalRailLayoutState extends State<HorizontalRailLayout> {
 
     return Container(
       padding: widget.headerPadding,
+      height: widget.headerHeight,
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Left: Page Title and Subtitle
+          // Left: Page Title (and optional Subtitle)
           Align(
             alignment: Alignment.centerLeft,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  currentTab.pageTitle,
-                  style: widget.pageTitleStyle ?? defaultTitleStyle,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  currentTab.subtitle,
-                  style: widget.subtitleStyle ?? defaultSubtitleStyle,
-                ),
-              ],
-            ),
+            child: widget.showSubtitle
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        currentTab.pageTitle,
+                        style: widget.pageTitleStyle ?? defaultTitleStyle,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        currentTab.subtitle,
+                        style: widget.subtitleStyle ?? defaultSubtitleStyle,
+                      ),
+                    ],
+                  )
+                : Text(
+                    currentTab.pageTitle,
+                    style: widget.pageTitleStyle ?? defaultTitleStyle,
+                  ),
           ),
 
           // Center: Tab Bar
