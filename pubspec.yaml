@@ -1,9 +1,9 @@
 name: flutter_rail_layout
 description: A Flutter package for creating horizontal rail layouts with animated floating tab bars featuring anchored expansion animation.
 version: 1.0.0
-homepage: https://github.com/user/flutter_rail_layout
-repository: https://github.com/user/flutter_rail_layout
-issue_tracker: https://github.com/user/flutter_rail_layout/issues
+homepage: https://github.com/lianghualin/flutter_rail_layout
+repository: https://github.com/lianghualin/flutter_rail_layout
+issue_tracker: https://github.com/lianghualin/flutter_rail_layout/issues
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
